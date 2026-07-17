@@ -2,7 +2,7 @@
 set -euo pipefail
 
 DOTFILES_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-STOW_PACKAGES=(zsh tmux ghostty git)
+STOW_PACKAGES=(zsh tmux ghostty)
 PINNED_TMUX_VERSION="3.6a"
 
 installHomebrewIfMissing() {
@@ -48,7 +48,6 @@ backupExistingFile() {
 backupConflictingDotfiles() {
   backupExistingFile "$HOME/.zshrc"
   backupExistingFile "$HOME/.tmux.conf"
-  backupExistingFile "$HOME/.gitconfig"
   backupExistingFile "$HOME/.config/ghostty/config"
 }
 
@@ -85,6 +84,7 @@ installTmuxFromSource() {
     sh autogen.sh
     PKG_CONFIG_PATH="$homebrewPrefix/lib/pkgconfig" ./configure \
       --prefix="$homebrewPrefix" \
+      --enable-utf8proc \
       LDFLAGS="-L$homebrewPrefix/lib" \
       CPPFLAGS="-I$homebrewPrefix/include"
     make
